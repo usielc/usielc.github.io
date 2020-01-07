@@ -368,10 +368,15 @@ module Jekyll
       end
     end
 
+    FLOAT_LIKE   = %r!\A\s*-?(?:\d+\.?\d*|\.\d+)\s*\Z!.freeze
+    INTEGER_LIKE = %r!\A\s*-?\d+\s*\Z!.freeze
+    private_constant :FLOAT_LIKE, :INTEGER_LIKE
+
     # return numeric values as numbers for proper sorting
     def parse_sort_input(property)
-      number_like = %r!\A\s*-?(?:\d+\.?\d*|\.\d+)\s*\Z!
-      return property.to_f if property =~ number_like
+      stringified = property.to_s
+      return property.to_i if INTEGER_LIKE.match?(stringified)
+      return property.to_f if FLOAT_LIKE.match?(stringified)
 
       property
     end
